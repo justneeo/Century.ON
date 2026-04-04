@@ -1,75 +1,368 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multilingual Telegram Form</title>
+  <title>Private Telegram Intake</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1115;
-      --card:#171a21;
-      --border:#2b3140;
-      --text:#f5f7fb;
-      --muted:#a9b1c3;
-      --accent:#5b8cff;
-      --accent-hover:#4a78e6;
-      --input:#11151d;
-      --radius:14px;
+      --bg:#050505;
+      --bg-2:#0b0b0c;
+      --glass:rgba(255,255,255,0.06);
+      --glass-2:rgba(255,255,255,0.04);
+      --line:rgba(255,255,255,0.10);
+      --line-strong:rgba(255,255,255,0.16);
+      --text:#f7f7f8;
+      --muted:#9c9ca3;
+      --soft:#b9b9c0;
+      --accent:#ffffff;
+      --accent-soft:rgba(255,255,255,0.10);
+      --success:#d8ffd8;
+      --radius:22px;
+      --radius-sm:14px;
+      --shadow:0 30px 80px rgba(0,0,0,0.55);
+      --blur:22px;
     }
 
     *{box-sizing:border-box}
 
+    html{
+      scroll-behavior:smooth;
+    }
+
     body{
       margin:0;
-      font-family:Inter, Arial, sans-serif;
-      background:linear-gradient(180deg,#0b0e13 0%, #10141c 100%);
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(255,255,255,0.04), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.03), transparent 35%),
+        linear-gradient(180deg, #020202 0%, #050505 40%, #080808 100%);
       color:var(--text);
       min-height:100vh;
+      padding:28px;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:radial-gradient(circle at center, black 45%, transparent 100%);
+      opacity:.28;
+    }
+
+    .shell{
+      width:100%;
+      max-width:1180px;
+      margin:0 auto;
+      position:relative;
+    }
+
+    .shell::before,
+    .shell::after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      filter:blur(70px);
+      z-index:0;
+      opacity:.16;
+    }
+
+    .shell::before{
+      width:260px;
+      height:260px;
+      top:30px;
+      left:-60px;
+      background:#fff;
+    }
+
+    .shell::after{
+      width:220px;
+      height:220px;
+      right:-40px;
+      bottom:40px;
+      background:#7f7f7f;
+    }
+
+    .frame{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:20px;
+      align-items:stretch;
+    }
+
+    .panel,
+    .form-panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.045));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(var(--blur));
+      -webkit-backdrop-filter:blur(var(--blur));
+      border-radius:30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel::before,
+    .form-panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), transparent 18%, transparent 75%, rgba(255,255,255,0.03));
+      opacity:.9;
+    }
+
+    .panel{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:760px;
+    }
+
+    .brand{
       display:flex;
       align-items:center;
-      justify-content:center;
-      padding:24px;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:26px;
     }
 
-    .card{
-      width:100%;
-      max-width:860px;
-      background:rgba(23,26,33,.96);
-      border:1px solid var(--border);
+    .brand-left{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .badge{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      border:1px solid var(--line-strong);
+      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      display:grid;
+      place-items:center;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.14em;
+      color:#fff;
+    }
+
+    .brand-meta h1{
+      margin:0;
+      font-size:15px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .brand-meta p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .status{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.04);
+      color:#d9d9de;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.04em;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:#fff;
+      box-shadow:0 0 14px rgba(255,255,255,.7);
+    }
+
+    .headline{
+      margin-top:10px;
+      margin-bottom:28px;
+    }
+
+    .headline .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.04);
+      color:#d4d4d8;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+
+    .headline h2{
+      margin:0;
+      font-size:40px;
+      line-height:1.04;
+      font-weight:800;
+      letter-spacing:-0.04em;
+      max-width:320px;
+    }
+
+    .headline p{
+      margin:14px 0 0;
+      font-size:15px;
+      line-height:1.65;
+      color:var(--soft);
+      max-width:340px;
+    }
+
+    .info-stack{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .mini-card{
+      border:1px solid rgba(255,255,255,0.08);
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
       border-radius:20px;
-      padding:28px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      padding:16px 16px 15px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
-    .topbar{
+    .mini-card .mini-label{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .mini-card .mini-value{
+      color:#fff;
+      font-size:15px;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    .points{
+      display:grid;
+      gap:10px;
+      margin-top:28px;
+    }
+
+    .point{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      color:#d0d0d5;
+      font-size:14px;
+    }
+
+    .point:last-child{
+      border-bottom:none;
+    }
+
+    .point-icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      flex-shrink:0;
+      color:#fff;
+      font-size:14px;
+    }
+
+    .footer-note{
+      margin-top:26px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,0.07);
+      color:#8f8f97;
+      font-size:12px;
+      line-height:1.65;
+    }
+
+    .form-panel{
+      padding:22px;
+      min-height:760px;
+    }
+
+    .form-top{
       display:flex;
       justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      margin-bottom:18px;
-      flex-wrap:wrap;
+      align-items:flex-start;
+      gap:18px;
+      margin-bottom:20px;
+      position:relative;
+      z-index:1;
     }
 
-    h1{
+    .form-top h3{
       margin:0;
-      font-size:28px;
+      font-size:24px;
+      letter-spacing:-0.03em;
     }
 
-    p{
+    .form-top p{
       margin:8px 0 0;
       color:var(--muted);
-      line-height:1.5;
+      font-size:14px;
+      line-height:1.55;
+      max-width:500px;
     }
 
-    .lang-switch{
-      min-width:180px;
+    .lang-wrap{
+      min-width:200px;
+    }
+
+    .lang-wrap label{
+      margin-bottom:8px;
+      display:block;
+      color:#cfcfd6;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-weight:700;
+    }
+
+    .lang-wrap select{
+      min-width:200px;
     }
 
     form{
+      position:relative;
+      z-index:1;
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:16px;
-      margin-top:22px;
     }
 
     .field{
@@ -83,31 +376,97 @@
     }
 
     label{
-      font-size:14px;
-      color:#dce2f0;
-      font-weight:600;
+      color:#f1f1f3;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
     }
 
-    input, select, textarea{
+    input,
+    select,
+    textarea{
       width:100%;
-      background:var(--input);
-      color:var(--text);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:14px 14px;
-      font-size:15px;
+      border:none;
       outline:none;
+      border-radius:18px;
+      padding:16px 16px;
+      font:inherit;
+      color:var(--text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 8px 20px rgba(0,0,0,0.18);
+      transition:all .22s ease;
     }
 
-    input:focus, select:focus, textarea:focus{
-      border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(91,140,255,.15);
+    input::placeholder,
+    textarea::placeholder{
+      color:#7f8088;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+      border-color:rgba(255,255,255,0.22);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.045));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 0 0 4px rgba(255,255,255,0.05),
+        0 14px 34px rgba(0,0,0,0.28);
+      transform:translateY(-1px);
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #bbb 50%),
+        linear-gradient(135deg, #bbb 50%, transparent 50%);
+      background-position:
+        calc(100% - 22px) calc(50% - 3px),
+        calc(100% - 16px) calc(50% - 3px);
+      background-size:6px 6px, 6px 6px;
+      background-repeat:no-repeat;
+      padding-right:42px;
     }
 
     textarea{
-      min-height:170px;
+      min-height:180px;
       resize:vertical;
-      font-family:inherit;
+      line-height:1.6;
+    }
+
+    .section-box{
+      grid-column:1 / -1;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025));
+      padding:18px;
+      display:grid;
+      gap:16px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .section-head strong{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:#f3f3f4;
+    }
+
+    .section-head span{
+      color:#8d8d95;
+      font-size:12px;
     }
 
     .actions{
@@ -115,38 +474,78 @@
       display:flex;
       gap:12px;
       flex-wrap:wrap;
-      margin-top:8px;
+      align-items:center;
+      margin-top:2px;
     }
 
     button{
+      appearance:none;
       border:none;
-      border-radius:12px;
-      padding:14px 18px;
-      font-size:15px;
-      font-weight:700;
       cursor:pointer;
+      transition:all .22s ease;
+      font:inherit;
     }
 
-    .primary{
-      background:var(--accent);
-      color:white;
+    .btn-primary,
+    .btn-secondary{
+      height:54px;
+      padding:0 20px;
+      border-radius:16px;
+      font-weight:700;
+      letter-spacing:.01em;
     }
 
-    .primary:hover{
-      background:var(--accent-hover);
+    .btn-primary{
+      color:#050505;
+      background:linear-gradient(180deg, #ffffff 0%, #dddddd 100%);
+      box-shadow:
+        0 12px 30px rgba(255,255,255,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.7);
     }
 
-    .secondary{
-      background:#232938;
-      color:#fff;
-      border:1px solid var(--border);
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:
+        0 16px 34px rgba(255,255,255,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8);
     }
 
-    .note{
-      margin-top:14px;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.5;
+    .btn-secondary{
+      color:#efeff2;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .btn-secondary:hover{
+      transform:translateY(-1px);
+      background:linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+    }
+
+    .helper{
+      color:#8f9098;
+      font-size:12px;
+      line-height:1.6;
+      margin-top:4px;
+    }
+
+    .preview-wrap{
+      position:relative;
+    }
+
+    .preview-tag{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:2;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      color:#bdbdc4;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.07em;
+      text-transform:uppercase;
     }
 
     .rtl{
@@ -154,141 +553,289 @@
       text-align:right;
     }
 
-    @media (max-width:700px){
+    .rtl .brand,
+    .rtl .brand-left,
+    .rtl .section-head,
+    .rtl .form-top,
+    .rtl .actions,
+    .rtl .point{
+      direction:rtl;
+    }
+
+    .rtl .preview-tag{
+      right:auto;
+      left:14px;
+    }
+
+    @media (max-width: 1040px){
+      .frame{
+        grid-template-columns:1fr;
+      }
+
+      .panel,
+      .form-panel{
+        min-height:auto;
+      }
+
+      .headline h2{
+        max-width:none;
+      }
+
+      .headline p{
+        max-width:none;
+      }
+    }
+
+    @media (max-width: 720px){
+      body{
+        padding:16px;
+      }
+
+      .panel,
+      .form-panel{
+        border-radius:24px;
+      }
+
+      .panel{
+        padding:20px;
+      }
+
+      .form-panel{
+        padding:18px;
+      }
+
+      .form-top{
+        flex-direction:column;
+      }
+
+      .lang-wrap{
+        width:100%;
+      }
+
+      .lang-wrap select{
+        min-width:0;
+        width:100%;
+      }
+
       form{
         grid-template-columns:1fr;
+      }
+
+      .headline h2{
+        font-size:32px;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      .btn-primary,
+      .btn-secondary{
+        width:100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="card" id="app">
-    <div class="topbar">
-      <div>
-        <h1 id="title">Telegram Form</h1>
-        <p id="subtitle">Complete the form and open Telegram with the predefined message for @invictuzzzzz.</p>
-      </div>
+  <div class="shell">
+    <div class="frame" id="app">
+      <aside class="panel">
+        <div>
+          <div class="brand">
+            <div class="brand-left">
+              <div class="badge">TG</div>
+              <div class="brand-meta">
+                <h1>Private Intake</h1>
+                <p>Secure • Structured • Direct</p>
+              </div>
+            </div>
+            <div class="status">
+              <span class="status-dot"></span>
+              <span id="statusText">Private workflow</span>
+            </div>
+          </div>
 
-      <div class="lang-switch">
-        <label for="uiLanguage" id="uiLanguageLabel">Interface language</label>
-        <select id="uiLanguage">
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="de">Deutsch</option>
-          <option value="fr">Français</option>
-          <option value="it">Italiano</option>
-          <option value="nl">Nederlands</option>
-          <option value="ru">Русский</option>
-          <option value="ar">العربية</option>
-        </select>
-      </div>
-    </div>
+          <div class="headline">
+            <div class="eyebrow" id="eyebrowText">Confidential channel</div>
+            <h2 id="sideTitle">Fast, private and efficient submission flow.</h2>
+            <p id="sideSubtitle">
+              Complete the form, review the message, and open Telegram with a structured predefined request.
+            </p>
+          </div>
 
-    <form id="telegramForm">
-      <div class="field">
-        <label for="package" data-i18n="packageLabel">Plan</label>
-        <select id="package" name="package">
-          <option value="Standard">Standard</option>
-          <option value="Centurion">Centurion</option>
-        </select>
-      </div>
+          <div class="info-stack">
+            <div class="mini-card">
+              <div class="mini-label" id="card1Label">Recipient</div>
+              <div class="mini-value">@invictuzzzzz</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label" id="card2Label">Environment</div>
+              <div class="mini-value" id="card2Value">Minimal interface with private operational look.</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label" id="card3Label">Output</div>
+              <div class="mini-value" id="card3Value">Preformatted message ready to send.</div>
+            </div>
+          </div>
 
-      <div class="field">
-        <label for="name" data-i18n="nameLabel">Name *</label>
-        <input id="name" name="name" type="text" placeholder="Your name" required />
-      </div>
+          <div class="points">
+            <div class="point">
+              <div class="point-icon">01</div>
+              <div id="point1">Clean internal-style UI with dark glass finish.</div>
+            </div>
+            <div class="point">
+              <div class="point-icon">02</div>
+              <div id="point2">Multilingual interface including Arabic and Russian.</div>
+            </div>
+            <div class="point">
+              <div class="point-icon">03</div>
+              <div id="point3">Structured data blocks for faster handling.</div>
+            </div>
+          </div>
+        </div>
 
-      <div class="field">
-        <label for="telegramId" data-i18n="telegramIdLabel">Telegram ID *</label>
-        <input id="telegramId" name="telegramId" type="text" placeholder="123456789" required />
-      </div>
+        <div class="footer-note" id="footerNote">
+          Designed to feel private, controlled and operational. Final sending is confirmed from Telegram.
+        </div>
+      </aside>
 
-      <div class="field">
-        <label for="phone" data-i18n="phoneLabel">Phone *</label>
-        <input id="phone" name="phone" type="tel" placeholder="+34..." required />
-      </div>
+      <section class="form-panel">
+        <div class="form-top">
+          <div>
+            <h3 id="title">Telegram Form</h3>
+            <p id="subtitle">
+              Complete the form and open Telegram with the predefined message for @invictuzzzzz.
+            </p>
+          </div>
 
-      <div class="field">
-        <label for="email" data-i18n="emailLabel">E-Mail</label>
-        <input id="email" name="email" type="email" placeholder="email@example.com" />
-      </div>
+          <div class="lang-wrap">
+            <label for="uiLanguage" id="uiLanguageLabel">Interface language</label>
+            <select id="uiLanguage">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+              <option value="it">Italiano</option>
+              <option value="nl">Nederlands</option>
+              <option value="ru">Русский</option>
+              <option value="ar">العربية</option>
+            </select>
+          </div>
+        </div>
 
-      <div class="field">
-        <label for="language" data-i18n="languageLabel">Language</label>
-        <select id="language" name="language">
-          <option value="DE">DE</option>
-          <option value="ES">ES</option>
-          <option value="EN">EN</option>
-          <option value="FR">FR</option>
-          <option value="IT">IT</option>
-          <option value="NL">NL</option>
-          <option value="RU">RU</option>
-          <option value="AR">AR</option>
-        </select>
-      </div>
+        <form id="telegramForm">
+          <div class="field">
+            <label for="package" data-i18n="packageLabel">Plan</label>
+            <select id="package" name="package">
+              <option value="Standard">Standard</option>
+              <option value="Centurion">Centurion</option>
+            </select>
+          </div>
 
-      <div class="field">
-        <label for="role" data-i18n="roleLabel">Role *</label>
-        <select id="role" name="role" required>
-          <option value="Security">Security</option>
-          <option value="Driver">Driver</option>
-          <option value="Support">Support</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
+          <div class="field">
+            <label for="name" data-i18n="nameLabel">Name *</label>
+            <input id="name" name="name" type="text" placeholder="Your name" required />
+          </div>
 
-      <div class="field">
-        <label for="location" data-i18n="locationLabel">Location</label>
-        <input id="location" name="location" type="text" placeholder="City / Area" />
-      </div>
+          <div class="field">
+            <label for="telegramId" data-i18n="telegramIdLabel">Telegram ID *</label>
+            <input id="telegramId" name="telegramId" type="text" placeholder="123456789" required />
+          </div>
 
-      <div class="field">
-        <label for="commissionModel" data-i18n="commissionModelLabel">Commission model</label>
-        <select id="commissionModel" name="commissionModel">
-          <option value="Standard">Standard</option>
-          <option value="Individual">Individual</option>
-        </select>
-      </div>
+          <div class="field">
+            <label for="phone" data-i18n="phoneLabel">Phone *</label>
+            <input id="phone" name="phone" type="tel" placeholder="+34..." required />
+          </div>
 
-      <div class="field">
-        <label for="ownCommission" data-i18n="ownCommissionLabel">Own commission € *</label>
-        <input id="ownCommission" name="ownCommission" type="number" min="0" step="0.01" value="20" required />
-      </div>
+          <div class="field">
+            <label for="email" data-i18n="emailLabel">E-Mail</label>
+            <input id="email" name="email" type="email" placeholder="email@example.com" />
+          </div>
 
-      <div class="field full">
-        <label for="paymentSection" data-i18n="paymentDataLabel">Payment details</label>
-        <input id="paymentSection" name="paymentSection" type="text" value="Payment details" readonly />
-      </div>
+          <div class="field">
+            <label for="language" data-i18n="languageLabel">Language</label>
+            <select id="language" name="language">
+              <option value="DE">DE</option>
+              <option value="ES">ES</option>
+              <option value="EN">EN</option>
+              <option value="FR">FR</option>
+              <option value="IT">IT</option>
+              <option value="NL">NL</option>
+              <option value="RU">RU</option>
+              <option value="AR">AR</option>
+            </select>
+          </div>
 
-      <div class="field">
-        <label for="paymentMethod" data-i18n="paymentMethodLabel">Payment method *</label>
-        <select id="paymentMethod" name="paymentMethod" required>
-          <option value="Revolut">Revolut</option>
-          <option value="Bank Transfer">Bank Transfer</option>
-          <option value="PayPal">PayPal</option>
-          <option value="Cash">Cash</option>
-          <option value="Bizum">Bizum</option>
-        </select>
-      </div>
+          <div class="field">
+            <label for="role" data-i18n="roleLabel">Role *</label>
+            <select id="role" name="role" required>
+              <option value="Security">Security</option>
+              <option value="Driver">Driver</option>
+              <option value="Support">Support</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-      <div class="field">
-        <label for="paymentDetail" data-i18n="paymentDetailLabel">Payment detail *</label>
-        <input id="paymentDetail" name="paymentDetail" type="text" placeholder="IBAN, @user, PayPal..." required />
-      </div>
+          <div class="field">
+            <label for="location" data-i18n="locationLabel">Location</label>
+            <input id="location" name="location" type="text" placeholder="City / Area" />
+          </div>
 
-      <div class="field full">
-        <label for="preview" data-i18n="previewLabel">Message preview</label>
-        <textarea id="preview" readonly></textarea>
-      </div>
+          <div class="field">
+            <label for="commissionModel" data-i18n="commissionModelLabel">Commission model</label>
+            <select id="commissionModel" name="commissionModel">
+              <option value="Standard">Standard</option>
+              <option value="Individual">Individual</option>
+            </select>
+          </div>
 
-      <div class="actions">
-        <button type="submit" class="primary" id="submitBtn">Open Telegram</button>
-        <button type="button" id="copyBtn" class="secondary">Copy message</button>
-      </div>
-    </form>
+          <div class="field">
+            <label for="ownCommission" data-i18n="ownCommissionLabel">Own commission € *</label>
+            <input id="ownCommission" name="ownCommission" type="number" min="0" step="0.01" value="20" required />
+          </div>
 
-    <div class="note" id="note">
-      This form supports English, Spanish, German, French, Italian, Dutch, Russian and Arabic.
+          <div class="section-box">
+            <div class="section-head">
+              <strong id="paymentBlockTitle">Payment details</strong>
+              <span id="paymentBlockMeta">Operational data block</span>
+            </div>
+
+            <div class="field">
+              <label for="paymentMethod" data-i18n="paymentMethodLabel">Payment method *</label>
+              <select id="paymentMethod" name="paymentMethod" required>
+                <option value="Revolut">Revolut</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Cash">Cash</option>
+                <option value="Bizum">Bizum</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="paymentDetail" data-i18n="paymentDetailLabel">Payment detail *</label>
+              <input id="paymentDetail" name="paymentDetail" type="text" placeholder="IBAN, @user, PayPal..." required />
+            </div>
+          </div>
+
+          <div class="field full preview-wrap">
+            <label for="preview" data-i18n="previewLabel">Message preview</label>
+            <div class="preview-tag" id="previewTag">Draft</div>
+            <textarea id="preview" readonly></textarea>
+            <div class="helper" id="previewHelper">
+              Review the structure before opening Telegram.
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn-primary" id="submitBtn">Open Telegram</button>
+            <button type="button" class="btn-secondary" id="copyBtn">Copy message</button>
+          </div>
+
+          <div class="helper" id="note">
+            This form supports English, Spanish, German, French, Italian, Dutch, Russian and Arabic.
+          </div>
+        </form>
+      </section>
     </div>
   </div>
 
@@ -314,7 +861,6 @@
         locationLabel: "Location",
         commissionModelLabel: "Commission model",
         ownCommissionLabel: "Own commission € *",
-        paymentDataLabel: "Payment details",
         paymentMethodLabel: "Payment method *",
         paymentDetailLabel: "Payment detail *",
         previewLabel: "Message preview",
@@ -322,6 +868,23 @@
         copyBtn: "Copy message",
         copied: "Copied",
         note: "This form supports English, Spanish, German, French, Italian, Dutch, Russian and Arabic.",
+        sideTitle: "Fast, private and efficient submission flow.",
+        sideSubtitle: "Complete the form, review the message, and open Telegram with a structured predefined request.",
+        statusText: "Private workflow",
+        eyebrowText: "Confidential channel",
+        card1Label: "Recipient",
+        card2Label: "Environment",
+        card2Value: "Minimal interface with private operational look.",
+        card3Label: "Output",
+        card3Value: "Preformatted message ready to send.",
+        point1: "Clean internal-style UI with dark glass finish.",
+        point2: "Multilingual interface including Arabic and Russian.",
+        point3: "Structured data blocks for faster handling.",
+        footerNote: "Designed to feel private, controlled and operational. Final sending is confirmed from Telegram.",
+        paymentBlockTitle: "Payment details",
+        paymentBlockMeta: "Operational data block",
+        previewTag: "Draft",
+        previewHelper: "Review the structure before opening Telegram.",
         placeholders: {
           name: "Your name",
           telegramId: "123456789",
@@ -361,7 +924,6 @@
         locationLabel: "Ubicación",
         commissionModelLabel: "Modelo de comisión",
         ownCommissionLabel: "Comisión propia € *",
-        paymentDataLabel: "Datos de pago",
         paymentMethodLabel: "Método de pago *",
         paymentDetailLabel: "Detalle de pago *",
         previewLabel: "Vista previa del mensaje",
@@ -369,6 +931,23 @@
         copyBtn: "Copiar mensaje",
         copied: "Copiado",
         note: "Este formulario soporta inglés, español, alemán, francés, italiano, neerlandés, ruso y árabe.",
+        sideTitle: "Flujo rápido, privado y eficiente.",
+        sideSubtitle: "Completa el formulario, revisa el mensaje y abre Telegram con una solicitud estructurada.",
+        statusText: "Flujo privado",
+        eyebrowText: "Canal confidencial",
+        card1Label: "Destinatario",
+        card2Label: "Entorno",
+        card2Value: "Interfaz minimalista con acabado operativo y privado.",
+        card3Label: "Salida",
+        card3Value: "Mensaje preformateado listo para enviar.",
+        point1: "UI limpia con acabado dark glass profesional.",
+        point2: "Interfaz multilingüe incluyendo árabe y ruso.",
+        point3: "Bloques estructurados para procesar más rápido.",
+        footerNote: "Diseñado para sentirse privado, controlado y operativo. El envío final se confirma desde Telegram.",
+        paymentBlockTitle: "Datos de pago",
+        paymentBlockMeta: "Bloque operativo",
+        previewTag: "Borrador",
+        previewHelper: "Revisa la estructura antes de abrir Telegram.",
         placeholders: {
           name: "Tu nombre",
           telegramId: "123456789",
@@ -408,7 +987,6 @@
         locationLabel: "Standort",
         commissionModelLabel: "Provisionsmodell",
         ownCommissionLabel: "Eigene Provision € *",
-        paymentDataLabel: "Zahlungsdaten",
         paymentMethodLabel: "Zahlungsmethode *",
         paymentDetailLabel: "Zahlungsdetail *",
         previewLabel: "Nachrichtenvorschau",
@@ -416,6 +994,23 @@
         copyBtn: "Nachricht kopieren",
         copied: "Kopiert",
         note: "Dieses Formular unterstützt Englisch, Spanisch, Deutsch, Französisch, Italienisch, Niederländisch, Russisch und Arabisch.",
+        sideTitle: "Schneller, privater und effizienter Ablauf.",
+        sideSubtitle: "Formular ausfüllen, Nachricht prüfen und Telegram mit einer strukturierten Anfrage öffnen.",
+        statusText: "Privater Ablauf",
+        eyebrowText: "Vertraulicher Kanal",
+        card1Label: "Empfänger",
+        card2Label: "Umgebung",
+        card2Value: "Minimale Oberfläche mit privatem, operativem Look.",
+        card3Label: "Ausgabe",
+        card3Value: "Vorformatiere Nachricht bereit zum Senden.",
+        point1: "Saubere interne UI mit dunklem Glass-Look.",
+        point2: "Mehrsprachige Oberfläche inklusive Arabisch und Russisch.",
+        point3: "Strukturierte Blöcke für schnellere Bearbeitung.",
+        footerNote: "Entwickelt für ein privates, kontrolliertes und operatives Gefühl. Das endgültige Senden wird in Telegram bestätigt.",
+        paymentBlockTitle: "Zahlungsdaten",
+        paymentBlockMeta: "Operativer Block",
+        previewTag: "Entwurf",
+        previewHelper: "Struktur vor dem Öffnen von Telegram prüfen.",
         placeholders: {
           name: "Dein Name",
           telegramId: "123456789",
@@ -455,7 +1050,6 @@
         locationLabel: "Lieu",
         commissionModelLabel: "Modèle de commission",
         ownCommissionLabel: "Commission propre € *",
-        paymentDataLabel: "Données de paiement",
         paymentMethodLabel: "Méthode de paiement *",
         paymentDetailLabel: "Détail du paiement *",
         previewLabel: "Aperçu du message",
@@ -463,6 +1057,23 @@
         copyBtn: "Copier le message",
         copied: "Copié",
         note: "Ce formulaire prend en charge l’anglais, l’espagnol, l’allemand, le français, l’italien, le néerlandais, le russe et l’arabe.",
+        sideTitle: "Flux rapide, privé et efficace.",
+        sideSubtitle: "Remplissez le formulaire, vérifiez le message et ouvrez Telegram avec une demande structurée.",
+        statusText: "Flux privé",
+        eyebrowText: "Canal confidentiel",
+        card1Label: "Destinataire",
+        card2Label: "Environnement",
+        card2Value: "Interface minimaliste avec une finition privée et opérationnelle.",
+        card3Label: "Sortie",
+        card3Value: "Message préformaté prêt à être envoyé.",
+        point1: "UI sobre avec finition dark glass professionnelle.",
+        point2: "Interface multilingue incluant l’arabe et le russe.",
+        point3: "Blocs structurés pour un traitement plus rapide.",
+        footerNote: "Conçu pour paraître privé, contrôlé et opérationnel. L’envoi final est confirmé depuis Telegram.",
+        paymentBlockTitle: "Données de paiement",
+        paymentBlockMeta: "Bloc opérationnel",
+        previewTag: "Brouillon",
+        previewHelper: "Vérifiez la structure avant d’ouvrir Telegram.",
         placeholders: {
           name: "Votre nom",
           telegramId: "123456789",
@@ -502,7 +1113,6 @@
         locationLabel: "Posizione",
         commissionModelLabel: "Modello di commissione",
         ownCommissionLabel: "Commissione propria € *",
-        paymentDataLabel: "Dati di pagamento",
         paymentMethodLabel: "Metodo di pagamento *",
         paymentDetailLabel: "Dettaglio pagamento *",
         previewLabel: "Anteprima messaggio",
@@ -510,6 +1120,23 @@
         copyBtn: "Copia messaggio",
         copied: "Copiato",
         note: "Questo modulo supporta inglese, spagnolo, tedesco, francese, italiano, olandese, russo e arabo.",
+        sideTitle: "Flusso rapido, privato ed efficiente.",
+        sideSubtitle: "Compila il modulo, controlla il messaggio e apri Telegram con una richiesta strutturata.",
+        statusText: "Flusso privato",
+        eyebrowText: "Canale riservato",
+        card1Label: "Destinatario",
+        card2Label: "Ambiente",
+        card2Value: "Interfaccia minimale con finitura privata e operativa.",
+        card3Label: "Output",
+        card3Value: "Messaggio preformattato pronto da inviare.",
+        point1: "UI pulita con finitura dark glass professionale.",
+        point2: "Interfaccia multilingue inclusi arabo e russo.",
+        point3: "Blocchi strutturati per gestione più rapida.",
+        footerNote: "Pensato per sembrare privato, controllato e operativo. L’invio finale viene confermato da Telegram.",
+        paymentBlockTitle: "Dati di pagamento",
+        paymentBlockMeta: "Blocco operativo",
+        previewTag: "Bozza",
+        previewHelper: "Controlla la struttura prima di aprire Telegram.",
         placeholders: {
           name: "Il tuo nome",
           telegramId: "123456789",
@@ -549,7 +1176,6 @@
         locationLabel: "Locatie",
         commissionModelLabel: "Commissiemodel",
         ownCommissionLabel: "Eigen commissie € *",
-        paymentDataLabel: "Betaalgegevens",
         paymentMethodLabel: "Betaalmethode *",
         paymentDetailLabel: "Betaaldetail *",
         previewLabel: "Berichtvoorbeeld",
@@ -557,6 +1183,23 @@
         copyBtn: "Bericht kopiëren",
         copied: "Gekopieerd",
         note: "Dit formulier ondersteunt Engels, Spaans, Duits, Frans, Italiaans, Nederlands, Russisch en Arabisch.",
+        sideTitle: "Snelle, private en efficiënte flow.",
+        sideSubtitle: "Vul het formulier in, controleer het bericht en open Telegram met een gestructureerd verzoek.",
+        statusText: "Private workflow",
+        eyebrowText: "Vertrouwelijk kanaal",
+        card1Label: "Ontvanger",
+        card2Label: "Omgeving",
+        card2Value: "Minimalistische interface met private operationele uitstraling.",
+        card3Label: "Output",
+        card3Value: "Vooraf opgemaakt bericht klaar om te verzenden.",
+        point1: "Strakke interne UI met dark glass afwerking.",
+        point2: "Meertalige interface inclusief Arabisch en Russisch.",
+        point3: "Gestructureerde blokken voor snellere verwerking.",
+        footerNote: "Ontworpen om privé, gecontroleerd en operationeel aan te voelen. Definitief verzenden wordt bevestigd vanuit Telegram.",
+        paymentBlockTitle: "Betaalgegevens",
+        paymentBlockMeta: "Operationeel blok",
+        previewTag: "Concept",
+        previewHelper: "Controleer de structuur voordat je Telegram opent.",
         placeholders: {
           name: "Jouw naam",
           telegramId: "123456789",
@@ -596,7 +1239,6 @@
         locationLabel: "Локация",
         commissionModelLabel: "Модель комиссии",
         ownCommissionLabel: "Своя комиссия € *",
-        paymentDataLabel: "Платежные данные",
         paymentMethodLabel: "Способ оплаты *",
         paymentDetailLabel: "Платежная информация *",
         previewLabel: "Предпросмотр сообщения",
@@ -604,6 +1246,23 @@
         copyBtn: "Скопировать сообщение",
         copied: "Скопировано",
         note: "Эта форма поддерживает английский, испанский, немецкий, французский, итальянский, нидерландский, русский и арабский.",
+        sideTitle: "Быстрый, приватный и эффективный поток.",
+        sideSubtitle: "Заполните форму, проверьте сообщение и откройте Telegram со структурированным запросом.",
+        statusText: "Приватный поток",
+        eyebrowText: "Конфиденциальный канал",
+        card1Label: "Получатель",
+        card2Label: "Среда",
+        card2Value: "Минималистичный интерфейс с приватным операционным стилем.",
+        card3Label: "Результат",
+        card3Value: "Готовое отформатированное сообщение для отправки.",
+        point1: "Чистый интерфейс с профессиональной dark glass отделкой.",
+        point2: "Мультиязычный интерфейс, включая арабский и русский.",
+        point3: "Структурированные блоки для более быстрой обработки.",
+        footerNote: "Дизайн создан для ощущения приватности, контроля и операционной четкости. Финальная отправка подтверждается в Telegram.",
+        paymentBlockTitle: "Платежные данные",
+        paymentBlockMeta: "Операционный блок",
+        previewTag: "Черновик",
+        previewHelper: "Проверьте структуру перед открытием Telegram.",
         placeholders: {
           name: "Ваше имя",
           telegramId: "123456789",
@@ -643,7 +1302,6 @@
         locationLabel: "الموقع",
         commissionModelLabel: "نموذج العمولة",
         ownCommissionLabel: "العمولة الخاصة € *",
-        paymentDataLabel: "بيانات الدفع",
         paymentMethodLabel: "طريقة الدفع *",
         paymentDetailLabel: "تفاصيل الدفع *",
         previewLabel: "معاينة الرسالة",
@@ -651,6 +1309,23 @@
         copyBtn: "نسخ الرسالة",
         copied: "تم النسخ",
         note: "هذا النموذج يدعم الإنجليزية والإسبانية والألمانية والفرنسية والإيطالية والهولندية والروسية والعربية.",
+        sideTitle: "تدفق سريع وخاص وفعّال.",
+        sideSubtitle: "أكمل النموذج، راجع الرسالة، ثم افتح تيليجرام بطلب منسق وواضح.",
+        statusText: "تدفق خاص",
+        eyebrowText: "قناة سرية",
+        card1Label: "المستلم",
+        card2Label: "البيئة",
+        card2Value: "واجهة بسيطة بطابع تشغيلي خاص واحترافي.",
+        card3Label: "النتيجة",
+        card3Value: "رسالة منسقة مسبقًا جاهزة للإرسال.",
+        point1: "واجهة نظيفة بلمسة dark glass احترافية.",
+        point2: "واجهة متعددة اللغات تشمل العربية والروسية.",
+        point3: "كتل بيانات منظمة لمعالجة أسرع.",
+        footerNote: "تم تصميمه ليبدو خاصًا ومنظمًا وتشغيليًا. الإرسال النهائي يتم تأكيده من داخل تيليجرام.",
+        paymentBlockTitle: "بيانات الدفع",
+        paymentBlockMeta: "قسم تشغيلي",
+        previewTag: "مسودة",
+        previewHelper: "راجع البنية قبل فتح تيليجرام.",
         placeholders: {
           name: "اسمك",
           telegramId: "123456789",
@@ -688,9 +1363,9 @@
 
     function updateUIText() {
       const dict = t();
+      const isRTL = currentLang() === "ar";
 
       document.documentElement.lang = currentLang();
-      const isRTL = currentLang() === "ar";
       document.documentElement.dir = isRTL ? "rtl" : "ltr";
       app.classList.toggle("rtl", isRTL);
 
@@ -700,6 +1375,24 @@
       document.getElementById("submitBtn").textContent = dict.submitBtn;
       document.getElementById("copyBtn").textContent = dict.copyBtn;
       document.getElementById("note").textContent = dict.note;
+
+      document.getElementById("sideTitle").textContent = dict.sideTitle;
+      document.getElementById("sideSubtitle").textContent = dict.sideSubtitle;
+      document.getElementById("statusText").textContent = dict.statusText;
+      document.getElementById("eyebrowText").textContent = dict.eyebrowText;
+      document.getElementById("card1Label").textContent = dict.card1Label;
+      document.getElementById("card2Label").textContent = dict.card2Label;
+      document.getElementById("card2Value").textContent = dict.card2Value;
+      document.getElementById("card3Label").textContent = dict.card3Label;
+      document.getElementById("card3Value").textContent = dict.card3Value;
+      document.getElementById("point1").textContent = dict.point1;
+      document.getElementById("point2").textContent = dict.point2;
+      document.getElementById("point3").textContent = dict.point3;
+      document.getElementById("footerNote").textContent = dict.footerNote;
+      document.getElementById("paymentBlockTitle").textContent = dict.paymentBlockTitle;
+      document.getElementById("paymentBlockMeta").textContent = dict.paymentBlockMeta;
+      document.getElementById("previewTag").textContent = dict.previewTag;
+      document.getElementById("previewHelper").textContent = dict.previewHelper;
 
       document.querySelector('[data-i18n="packageLabel"]').textContent = dict.packageLabel;
       document.querySelector('[data-i18n="nameLabel"]').textContent = dict.nameLabel;
@@ -711,7 +1404,6 @@
       document.querySelector('[data-i18n="locationLabel"]').textContent = dict.locationLabel;
       document.querySelector('[data-i18n="commissionModelLabel"]').textContent = dict.commissionModelLabel;
       document.querySelector('[data-i18n="ownCommissionLabel"]').textContent = dict.ownCommissionLabel;
-      document.querySelector('[data-i18n="paymentDataLabel"]').textContent = dict.paymentDataLabel;
       document.querySelector('[data-i18n="paymentMethodLabel"]').textContent = dict.paymentMethodLabel;
       document.querySelector('[data-i18n="paymentDetailLabel"]').textContent = dict.paymentDetailLabel;
       document.querySelector('[data-i18n="previewLabel"]').textContent = dict.previewLabel;
@@ -722,7 +1414,6 @@
       document.getElementById("email").placeholder = dict.placeholders.email;
       document.getElementById("location").placeholder = dict.placeholders.location;
       document.getElementById("paymentDetail").placeholder = dict.placeholders.paymentDetail;
-      document.getElementById("paymentSection").value = dict.paymentDataLabel;
 
       updatePreview();
     }
@@ -757,22 +1448,17 @@
 
     form.addEventListener("input", updatePreview);
     form.addEventListener("change", updatePreview);
-
     uiLanguage.addEventListener("change", updateUIText);
 
     form.addEventListener("submit", function(e) {
       e.preventDefault();
-
       if (!form.reportValidity()) return;
 
-      const message = getMessage();
-      const encoded = encodeURIComponent(message);
-
+      const encoded = encodeURIComponent(getMessage());
       const tgDeepLink = `tg://resolve?domain=invictuzzzzz&text=${encoded}`;
       const webFallback = `https://t.me/invictuzzzzz?text=${encoded}`;
 
       window.location.href = tgDeepLink;
-
       setTimeout(() => {
         window.open(webFallback, "_blank");
       }, 700);
@@ -781,13 +1467,13 @@
     copyBtn.addEventListener("click", async function() {
       try {
         await navigator.clipboard.writeText(getMessage());
-        const old = t().copyBtn;
+        const oldText = t().copyBtn;
         copyBtn.textContent = t().copied;
         setTimeout(() => {
-          copyBtn.textContent = old;
-        }, 1500);
+          copyBtn.textContent = oldText;
+        }, 1400);
       } catch {
-        alert("Copy failed");
+        copyBtn.textContent = t().copyBtn;
       }
     });
 
