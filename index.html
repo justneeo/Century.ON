@@ -213,6 +213,104 @@
       text-align:right;
     }
 
+    .faq-section{
+      margin-top:24px;
+      padding-top:22px;
+      border-top:1px solid var(--border);
+    }
+
+    .faq-header{
+      margin-bottom:14px;
+    }
+
+    .faq-header h2{
+      margin:0 0 6px;
+      font-size:18px;
+      letter-spacing:-0.03em;
+    }
+
+    .faq-header p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .faq-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .faq-item{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(255,255,255,0.035);
+      overflow:hidden;
+    }
+
+    .faq-item summary{
+      list-style:none;
+      cursor:pointer;
+      padding:16px;
+      font-weight:700;
+      font-size:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .faq-item summary::-webkit-details-marker{
+      display:none;
+    }
+
+    .faq-item summary::after{
+      content:"+";
+      font-size:20px;
+      color:var(--muted);
+      line-height:1;
+    }
+
+    .faq-item[open] summary::after{
+      content:"−";
+    }
+
+    .faq-content{
+      padding:0 16px 16px;
+      color:#d7d7db;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .faq-content p{
+      margin:0 0 10px;
+    }
+
+    .faq-content p:last-child{
+      margin-bottom:0;
+    }
+
+    .faq-content strong{
+      color:#fff;
+    }
+
+    .faq-content ul,
+    .faq-content ol{
+      margin:8px 0 14px;
+      padding-left:20px;
+    }
+
+    .rtl .faq-content ul,
+    .rtl .faq-content ol{
+      padding-left:0;
+      padding-right:20px;
+    }
+
+    .faq-content li{
+      margin-bottom:6px;
+    }
+
     @media (max-width:720px){
       body{
         padding:14px;
@@ -255,17 +353,17 @@
           <select id="uiLanguage">
             <option value="en">English</option>
             <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="it">Italiano</option>
-            <option value="nl">Nederlands</option>
-            <option value="ru">Русский</option>
-            <option value="ar">العربية</option>
           </select>
         </div>
       </div>
 
       <form id="telegramForm">
+        <input type="hidden" id="plan" name="plan" value="Standard" />
+
+        <div class="field full">
+          <label data-i18n="planLabel">Plan</label>
+          <input type="text" value="Standard" readonly />
+        </div>
         <div class="field">
           <label for="firstName" data-i18n="firstNameLabel">First name *</label>
           <input id="firstName" name="firstName" type="text" placeholder="First name" required autocomplete="given-name" />
@@ -349,6 +447,40 @@
           <button type="button" class="secondary" id="copyBtn">Copy</button>
         </div>
       </form>
+
+      <section class="faq-section" aria-labelledby="faqTitle">
+        <div class="faq-header">
+          <h2 id="faqTitle" data-i18n="faqTitle">FAQs</h2>
+          <p data-i18n="faqSubtitle">Important information about RED, QR Holders and payouts.</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary data-i18n="faqWhatIsRedTitle">What is RED?</summary>
+            <div class="faq-content" data-faq="whatIsRed"></div>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faqQrHolderTitle">QR Code Holder</summary>
+            <div class="faq-content" data-faq="qrHolder"></div>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faqQrAppTitle">What is the QR Holder app?</summary>
+            <div class="faq-content" data-faq="qrApp"></div>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faqPayoutTitle">How does payout work?</summary>
+            <div class="faq-content" data-faq="payout"></div>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faqCenturionTitle">What is the difference between Centurion and Regular?</summary>
+            <div class="faq-content" data-faq="centurion"></div>
+          </details>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -366,20 +498,21 @@
         title: "Affiliate Form",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Language",
+        planLabel: "Plan",
         firstNameLabel: "First name *",
         lastNameLabel: "Last name *",
-        phoneLabel: "Phone *",
+        phoneLabel: "Phone number *",
         telegramIdLabel: "Telegram ID *",
         telegramHint: "Only the numeric Telegram ID, not @username.",
         emailLabel: "E-Mail *",
         roleLabel: "Role *",
         workplaceLabel: "Workplace *",
-        languageLabel: "Language *",
+        languageLabel: "Preferred language *",
         paymentMethodLabel: "Payment method *",
-        paymentDetailLabel: "Payment detail *",
-        previewLabel: "Preview",
+        paymentDetailLabel: "Payment details *",
+        previewLabel: "Message preview",
         submitBtn: "Open Telegram",
-        copyBtn: "Copy",
+        copyBtn: "Copy message",
         copied: "Copied",
         placeholders: {
           firstName: "First name",
@@ -387,27 +520,109 @@
           phone: "+34...",
           telegramId: "123456789",
           email: "email@example.com",
-          workplace: "Workplace",
+          workplace: "Company, hotel, club or workplace",
           paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
-          header: "New affiliate",
+          header: "New affiliate registration",
+          plan: "Plan",
           firstName: "First name",
           lastName: "Last name",
-          phone: "Phone",
+          phone: "Phone number",
           telegramId: "Telegram ID",
           email: "E-Mail",
           role: "Role",
           workplace: "Workplace",
-          language: "Language",
+          language: "Preferred language",
           paymentMethod: "Payment method",
-          paymentDetail: "Payment detail"
+          paymentDetail: "Payment details"
+        },
+        faqTitle: "FAQs",
+        faqSubtitle: "Important information about RED, QR Holders and payouts.",
+        faqWhatIsRedTitle: "What is RED?",
+        faqQrHolderTitle: "QR Code Holder",
+        faqQrAppTitle: "What is the QR Holder app?",
+        faqPayoutTitle: "How does payout work?",
+        faqCenturionTitle: "What is the difference between Centurion and Regular?",
+        faqs: {
+          whatIsRed: `
+            <p><strong>RED is the concierge in the world's oldest trade.</strong> The goal is to improve conditions for everyone involved — especially for RED Members.</p>
+            <p><strong>For RED Members</strong></p>
+            <p>RED connects through the network:</p>
+            <ul>
+              <li>RED Members and clients</li>
+              <li>Handles all communication</li>
+              <li>Organises everything</li>
+              <li>Provides its own drivers for safe, punctual transport</li>
+              <li>Offers a 24/7 help process available at any time</li>
+              <li>Always operates with full discretion</li>
+            </ul>
+            <p>RED also supports in everyday life, for example:</p>
+            <ul>
+              <li>Finding accommodation</li>
+              <li>Health topics, physical and mental</li>
+              <li>Legal matters</li>
+              <li>Other concerns</li>
+            </ul>
+            <p><strong>Important:</strong></p>
+            <ul>
+              <li>Network fees only apply when RED actually organises a meeting</li>
+              <li>The long-term goal is to reduce fees to a maximum of 15%</li>
+            </ul>
+            <p><strong>For Clients</strong></p>
+            <p>RED offers:</p>
+            <ul>
+              <li>A simple and fast way to find suitable RED Members</li>
+              <li>Immediate responses</li>
+              <li>Organised, punctual and safe processes</li>
+              <li>Full discretion</li>
+              <li>A convenient way to have a good time</li>
+            </ul>
+          `,
+          qrHolder: `
+            <ul>
+              <li>QR Code Holders are a core element of the network</li>
+              <li>They contribute to the network's growth and development</li>
+              <li>They receive a referral bonus for their involvement</li>
+            </ul>
+            <p><strong>How it works in practice:</strong></p>
+            <ol>
+              <li>A QR Code Holder is approached and spots an opportunity for a meeting</li>
+              <li>The interested person scans the QR Code and is connected directly with RED on Telegram</li>
+              <li>RED automatically recognises that the new member came through this QR Code and assigns the referral</li>
+              <li>If a meeting with a RED Member takes place, the referral is considered successful</li>
+              <li>The QR Code Holder then receives their referral bonus</li>
+            </ol>
+          `,
+          qrApp: `
+            <p>The QR Holder app doesn't just hold your QR Code — it provides full transparency over all activities.</p>
+            <p><strong>Here you can see:</strong></p>
+            <ul>
+              <li>How many scans or actual referrals you have generated</li>
+              <li>Which new QR Code Holders joined through you</li>
+              <li>Your current billing status</li>
+              <li>You can communicate directly with RED via a messenger</li>
+            </ul>
+            <p><strong>For Centurion QR Holders additionally:</strong></p>
+            <ul>
+              <li>Create your own QR Codes for your own team</li>
+              <li>Expand the network through your own structure</li>
+              <li>Actively support network growth</li>
+            </ul>
+          `,
+          payout: `
+            <p>We settle the referral bonus monthly. The billing section gives you full transparency.</p>
+          `,
+          centurion: `
+            <p>Centurion QR partners drive the RED network forward with their own team. They can pick their team members and issue their own QR codes.</p>
+          `
         }
       },
       es: {
         title: "Formulario de Afiliado",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Idioma",
+        planLabel: "Plan",
         firstNameLabel: "Nombre *",
         lastNameLabel: "Apellido *",
         phoneLabel: "Teléfono *",
@@ -416,12 +631,12 @@
         emailLabel: "E-Mail *",
         roleLabel: "Rol *",
         workplaceLabel: "Lugar de trabajo *",
-        languageLabel: "Idioma *",
+        languageLabel: "Idioma preferido *",
         paymentMethodLabel: "Método de pago *",
         paymentDetailLabel: "Detalle de pago *",
-        previewLabel: "Vista previa",
+        previewLabel: "Vista previa del mensaje",
         submitBtn: "Abrir Telegram",
-        copyBtn: "Copiar",
+        copyBtn: "Copiar mensaje",
         copied: "Copiado",
         placeholders: {
           firstName: "Nombre",
@@ -429,11 +644,12 @@
           phone: "+34...",
           telegramId: "123456789",
           email: "email@ejemplo.com",
-          workplace: "Lugar de trabajo",
+          workplace: "Empresa, hotel, club o lugar de trabajo",
           paymentDetail: "IBAN / @usuario / PayPal / Bizum"
         },
         fields: {
-          header: "Nuevo afiliado",
+          header: "Nuevo registro de afiliado",
+          plan: "Plan",
           firstName: "Nombre",
           lastName: "Apellido",
           phone: "Teléfono",
@@ -441,261 +657,89 @@
           email: "E-Mail",
           role: "Rol",
           workplace: "Lugar de trabajo",
-          language: "Idioma",
+          language: "Idioma preferido",
           paymentMethod: "Método de pago",
           paymentDetail: "Detalle de pago"
-        }
-      },
-      de: {
-        title: "Affiliate-Formular",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "Sprache",
-        firstNameLabel: "Vorname *",
-        lastNameLabel: "Nachname *",
-        phoneLabel: "Telefon *",
-        telegramIdLabel: "Telegram-ID *",
-        telegramHint: "Nur die numerische Telegram-ID, nicht @Benutzername.",
-        emailLabel: "E-Mail *",
-        roleLabel: "Rolle *",
-        workplaceLabel: "Arbeitsort *",
-        languageLabel: "Sprache *",
-        paymentMethodLabel: "Zahlungsmethode *",
-        paymentDetailLabel: "Zahlungsdetail *",
-        previewLabel: "Vorschau",
-        submitBtn: "Telegram öffnen",
-        copyBtn: "Kopieren",
-        copied: "Kopiert",
-        placeholders: {
-          firstName: "Vorname",
-          lastName: "Nachname",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@beispiel.com",
-          workplace: "Arbeitsort",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
-        fields: {
-          header: "Neuer Affiliate",
-          firstName: "Vorname",
-          lastName: "Nachname",
-          phone: "Telefon",
-          telegramId: "Telegram-ID",
-          email: "E-Mail",
-          role: "Rolle",
-          workplace: "Arbeitsort",
-          language: "Sprache",
-          paymentMethod: "Zahlungsmethode",
-          paymentDetail: "Zahlungsdetail"
-        }
-      },
-      fr: {
-        title: "Formulaire Affilié",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "Langue",
-        firstNameLabel: "Prénom *",
-        lastNameLabel: "Nom *",
-        phoneLabel: "Téléphone *",
-        telegramIdLabel: "ID Telegram *",
-        telegramHint: "Uniquement l'ID numérique Telegram, pas @utilisateur.",
-        emailLabel: "E-Mail *",
-        roleLabel: "Rôle *",
-        workplaceLabel: "Lieu de travail *",
-        languageLabel: "Langue *",
-        paymentMethodLabel: "Méthode de paiement *",
-        paymentDetailLabel: "Détail du paiement *",
-        previewLabel: "Aperçu",
-        submitBtn: "Ouvrir Telegram",
-        copyBtn: "Copier",
-        copied: "Copié",
-        placeholders: {
-          firstName: "Prénom",
-          lastName: "Nom",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@exemple.com",
-          workplace: "Lieu de travail",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
-        },
-        fields: {
-          header: "Nouvel affilié",
-          firstName: "Prénom",
-          lastName: "Nom",
-          phone: "Téléphone",
-          telegramId: "ID Telegram",
-          email: "E-Mail",
-          role: "Rôle",
-          workplace: "Lieu de travail",
-          language: "Langue",
-          paymentMethod: "Méthode de paiement",
-          paymentDetail: "Détail du paiement"
-        }
-      },
-      it: {
-        title: "Modulo Affiliato",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "Lingua",
-        firstNameLabel: "Nome *",
-        lastNameLabel: "Cognome *",
-        phoneLabel: "Telefono *",
-        telegramIdLabel: "ID Telegram *",
-        telegramHint: "Solo l'ID numerico di Telegram, non @username.",
-        emailLabel: "E-Mail *",
-        roleLabel: "Ruolo *",
-        workplaceLabel: "Luogo di lavoro *",
-        languageLabel: "Lingua *",
-        paymentMethodLabel: "Metodo di pagamento *",
-        paymentDetailLabel: "Dettaglio pagamento *",
-        previewLabel: "Anteprima",
-        submitBtn: "Apri Telegram",
-        copyBtn: "Copia",
-        copied: "Copiato",
-        placeholders: {
-          firstName: "Nome",
-          lastName: "Cognome",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@esempio.com",
-          workplace: "Luogo di lavoro",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
-        },
-        fields: {
-          header: "Nuovo affiliato",
-          firstName: "Nome",
-          lastName: "Cognome",
-          phone: "Telefono",
-          telegramId: "ID Telegram",
-          email: "E-Mail",
-          role: "Ruolo",
-          workplace: "Luogo di lavoro",
-          language: "Lingua",
-          paymentMethod: "Metodo di pagamento",
-          paymentDetail: "Dettaglio pagamento"
-        }
-      },
-      nl: {
-        title: "Affiliate Formulier",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "Taal",
-        firstNameLabel: "Voornaam *",
-        lastNameLabel: "Achternaam *",
-        phoneLabel: "Telefoon *",
-        telegramIdLabel: "Telegram-ID *",
-        telegramHint: "Alleen de numerieke Telegram-ID, niet @gebruikersnaam.",
-        emailLabel: "E-Mail *",
-        roleLabel: "Rol *",
-        workplaceLabel: "Werkplek *",
-        languageLabel: "Taal *",
-        paymentMethodLabel: "Betaalmethode *",
-        paymentDetailLabel: "Betaaldetail *",
-        previewLabel: "Voorbeeld",
-        submitBtn: "Telegram openen",
-        copyBtn: "Kopiëren",
-        copied: "Gekopieerd",
-        placeholders: {
-          firstName: "Voornaam",
-          lastName: "Achternaam",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@voorbeeld.com",
-          workplace: "Werkplek",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
-        },
-        fields: {
-          header: "Nieuwe affiliate",
-          firstName: "Voornaam",
-          lastName: "Achternaam",
-          phone: "Telefoon",
-          telegramId: "Telegram-ID",
-          email: "E-Mail",
-          role: "Rol",
-          workplace: "Werkplek",
-          language: "Taal",
-          paymentMethod: "Betaalmethode",
-          paymentDetail: "Betaaldetail"
-        }
-      },
-      ru: {
-        title: "Форма Аффилиата",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "Язык",
-        firstNameLabel: "Имя *",
-        lastNameLabel: "Фамилия *",
-        phoneLabel: "Телефон *",
-        telegramIdLabel: "Telegram ID *",
-        telegramHint: "Только числовой Telegram ID, не @username.",
-        emailLabel: "E-Mail *",
-        roleLabel: "Роль *",
-        workplaceLabel: "Место работы *",
-        languageLabel: "Язык *",
-        paymentMethodLabel: "Способ оплаты *",
-        paymentDetailLabel: "Платежная информация *",
-        previewLabel: "Предпросмотр",
-        submitBtn: "Открыть Telegram",
-        copyBtn: "Копировать",
-        copied: "Скопировано",
-        placeholders: {
-          firstName: "Имя",
-          lastName: "Фамилия",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@example.com",
-          workplace: "Место работы",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
-        },
-        fields: {
-          header: "Новый аффилиат",
-          firstName: "Имя",
-          lastName: "Фамилия",
-          phone: "Телефон",
-          telegramId: "Telegram ID",
-          email: "E-Mail",
-          role: "Роль",
-          workplace: "Место работы",
-          language: "Язык",
-          paymentMethod: "Способ оплаты",
-          paymentDetail: "Платежная информация"
-        }
-      },
-      ar: {
-        title: "نموذج الشريك",
-        subtitle: "@invictuzzzzz",
-        uiLanguageLabel: "اللغة",
-        firstNameLabel: "الاسم *",
-        lastNameLabel: "اللقب *",
-        phoneLabel: "الهاتف *",
-        telegramIdLabel: "معرّف تيليجرام *",
-        telegramHint: "فقط الرقم التعريفي في تيليجرام، وليس @username.",
-        emailLabel: "البريد الإلكتروني *",
-        roleLabel: "الدور *",
-        workplaceLabel: "مكان العمل *",
-        languageLabel: "اللغة *",
-        paymentMethodLabel: "طريقة الدفع *",
-        paymentDetailLabel: "تفاصيل الدفع *",
-        previewLabel: "المعاينة",
-        submitBtn: "فتح تيليجرام",
-        copyBtn: "نسخ",
-        copied: "تم النسخ",
-        placeholders: {
-          firstName: "الاسم",
-          lastName: "اللقب",
-          phone: "+34...",
-          telegramId: "123456789",
-          email: "email@example.com",
-          workplace: "مكان العمل",
-          paymentDetail: "IBAN / @user / PayPal / Bizum"
-        },
-        fields: {
-          header: "شريك جديد",
-          firstName: "الاسم",
-          lastName: "اللقب",
-          phone: "الهاتف",
-          telegramId: "معرّف تيليجرام",
-          email: "البريد الإلكتروني",
-          role: "الدور",
-          workplace: "مكان العمل",
-          language: "اللغة",
-          paymentMethod: "طريقة الدفع",
-          paymentDetail: "تفاصيل الدفع"
+        faqTitle: "Preguntas frecuentes",
+        faqSubtitle: "Información importante sobre RED, QR Holders y pagos.",
+        faqWhatIsRedTitle: "¿Qué es RED?",
+        faqQrHolderTitle: "QR Code Holder",
+        faqQrAppTitle: "¿Qué es la app QR Holder?",
+        faqPayoutTitle: "¿Cómo funciona el pago?",
+        faqCenturionTitle: "¿Cuál es la diferencia entre Centurion y Regular?",
+        faqs: {
+          whatIsRed: `
+            <p><strong>RED es el concierge del oficio más antiguo del mundo.</strong> El objetivo es mejorar las condiciones para todas las personas involucradas, especialmente para los RED Members.</p>
+            <p><strong>Para RED Members</strong></p>
+            <p>RED conecta a través de la red:</p>
+            <ul>
+              <li>RED Members y clientes</li>
+              <li>Gestiona toda la comunicación</li>
+              <li>Organiza todo el proceso</li>
+              <li>Proporciona sus propios conductores para un transporte seguro y puntual</li>
+              <li>Ofrece un proceso de ayuda 24/7 disponible en cualquier momento</li>
+              <li>Opera siempre con total discreción</li>
+            </ul>
+            <p>RED también apoya en la vida diaria, por ejemplo:</p>
+            <ul>
+              <li>Búsqueda de alojamiento</li>
+              <li>Temas de salud física y mental</li>
+              <li>Asuntos legales</li>
+              <li>Otras necesidades o preocupaciones</li>
+            </ul>
+            <p><strong>Importante:</strong></p>
+            <ul>
+              <li>Las tarifas de red solo se aplican cuando RED organiza realmente un encuentro</li>
+              <li>El objetivo a largo plazo es reducir las tarifas a un máximo del 15%</li>
+            </ul>
+            <p><strong>Para clientes</strong></p>
+            <p>RED ofrece:</p>
+            <ul>
+              <li>Una forma simple y rápida de encontrar RED Members adecuados</li>
+              <li>Respuestas inmediatas</li>
+              <li>Procesos organizados, puntuales y seguros</li>
+              <li>Total discreción</li>
+              <li>Una forma cómoda de pasar un buen momento</li>
+            </ul>
+          `,
+          qrHolder: `
+            <ul>
+              <li>Los QR Code Holders son un elemento clave de la red</li>
+              <li>Contribuyen al crecimiento y desarrollo de la red</li>
+              <li>Reciben un bonus de referidos por su participación</li>
+            </ul>
+            <p><strong>Cómo funciona en la práctica:</strong></p>
+            <ol>
+              <li>Un QR Code Holder detecta una oportunidad para un encuentro</li>
+              <li>La persona interesada escanea el QR Code y se conecta directamente con RED en Telegram</li>
+              <li>RED reconoce automáticamente que el nuevo miembro llegó a través de ese QR Code y asigna el referido</li>
+              <li>Si se realiza un encuentro con un RED Member, el referido se considera exitoso</li>
+              <li>El QR Code Holder recibe entonces su bonus de referido</li>
+            </ol>
+          `,
+          qrApp: `
+            <p>La app QR Holder no solo guarda tu QR Code; también ofrece transparencia completa sobre toda la actividad.</p>
+            <p><strong>Aquí puedes ver:</strong></p>
+            <ul>
+              <li>Cuántos escaneos o referidos reales has generado</li>
+              <li>Qué nuevos QR Code Holders se unieron a través de ti</li>
+              <li>Tu estado de facturación actual</li>
+              <li>También puedes comunicarte directamente con RED mediante un messenger</li>
+            </ul>
+            <p><strong>Además, para QR Holders Centurion:</strong></p>
+            <ul>
+              <li>Crear tus propios QR Codes para tu propio equipo</li>
+              <li>Expandir la red a través de tu propia estructura</li>
+              <li>Apoyar activamente el crecimiento de la red</li>
+            </ul>
+          `,
+          payout: `
+            <p>El bonus de referidos se liquida mensualmente. La sección de facturación ofrece transparencia completa.</p>
+          `,
+          centurion: `
+            <p>Los partners QR Centurion impulsan la red RED con su propio equipo. Pueden elegir a los miembros de su equipo y emitir sus propios QR Codes.</p>
+          `
         }
       }
     };
@@ -732,6 +776,7 @@
       document.getElementById("submitBtn").textContent = dict.submitBtn;
       document.getElementById("copyBtn").textContent = dict.copyBtn;
 
+      setText('[data-i18n="planLabel"]', dict.planLabel);
       setText('[data-i18n="firstNameLabel"]', dict.firstNameLabel);
       setText('[data-i18n="lastNameLabel"]', dict.lastNameLabel);
       setText('[data-i18n="phoneLabel"]', dict.phoneLabel);
@@ -744,6 +789,18 @@
       setText('[data-i18n="paymentMethodLabel"]', dict.paymentMethodLabel);
       setText('[data-i18n="paymentDetailLabel"]', dict.paymentDetailLabel);
       setText('[data-i18n="previewLabel"]', dict.previewLabel);
+      setText('[data-i18n="faqTitle"]', dict.faqTitle);
+      setText('[data-i18n="faqSubtitle"]', dict.faqSubtitle);
+      setText('[data-i18n="faqWhatIsRedTitle"]', dict.faqWhatIsRedTitle);
+      setText('[data-i18n="faqQrHolderTitle"]', dict.faqQrHolderTitle);
+      setText('[data-i18n="faqQrAppTitle"]', dict.faqQrAppTitle);
+      setText('[data-i18n="faqPayoutTitle"]', dict.faqPayoutTitle);
+      setText('[data-i18n="faqCenturionTitle"]', dict.faqCenturionTitle);
+
+      document.querySelectorAll('[data-faq]').forEach((element) => {
+        const key = element.getAttribute('data-faq');
+        element.innerHTML = dict.faqs[key] || '';
+      });
 
       setPlaceholder("firstName", dict.placeholders.firstName);
       setPlaceholder("lastName", dict.placeholders.lastName);
@@ -763,6 +820,7 @@
       return [
         dict.header,
         "",
+        `${dict.plan}: ${data.get("plan") || "Standard"}`,
         `${dict.firstName}: ${data.get("firstName") || ""}`,
         `${dict.lastName}: ${data.get("lastName") || ""}`,
         `${dict.phone}: ${data.get("phone") || ""}`,
