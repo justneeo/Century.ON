@@ -21,7 +21,6 @@
       --button:#ffffff;
       --button-text:#050505;
       --radius:20px;
-      --radius-sm:14px;
       --shadow:0 20px 60px rgba(0,0,0,0.45);
     }
 
@@ -30,7 +29,7 @@
     html,body{
       margin:0;
       padding:0;
-      background:radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 30%), #050505;
+      background:radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 30%), var(--bg);
       color:var(--text);
       font-family:"Inter", sans-serif;
       min-height:100%;
@@ -99,6 +98,13 @@
       letter-spacing:.02em;
     }
 
+    .hint{
+      margin-top:7px;
+      font-size:11px;
+      line-height:1.35;
+      color:var(--muted);
+    }
+
     form{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -152,6 +158,11 @@
       background-size:6px 6px, 6px 6px;
       background-repeat:no-repeat;
       padding-right:40px;
+    }
+
+    option{
+      background:#111;
+      color:#fff;
     }
 
     textarea{
@@ -256,45 +267,29 @@
 
       <form id="telegramForm">
         <div class="field">
-          <label for="plan" data-i18n="planLabel">Plan</label>
-          <select id="plan" name="plan">
-            <option value="Standard">Standard</option>
-            <option value="Centurion">Centurion</option>
-          </select>
+          <label for="firstName" data-i18n="firstNameLabel">First name *</label>
+          <input id="firstName" name="firstName" type="text" placeholder="First name" required autocomplete="given-name" />
         </div>
 
         <div class="field">
-          <label for="name" data-i18n="nameLabel">Name *</label>
-          <input id="name" name="name" type="text" placeholder="Name" required />
-        </div>
-
-        <div class="field">
-          <label for="telegramId" data-i18n="telegramIdLabel">Telegram ID *</label>
-          <input id="telegramId" name="telegramId" type="text" placeholder="123456789" required />
+          <label for="lastName" data-i18n="lastNameLabel">Last name *</label>
+          <input id="lastName" name="lastName" type="text" placeholder="Last name" required autocomplete="family-name" />
         </div>
 
         <div class="field">
           <label for="phone" data-i18n="phoneLabel">Phone *</label>
-          <input id="phone" name="phone" type="tel" placeholder="+34..." required />
+          <input id="phone" name="phone" type="tel" placeholder="+34..." required autocomplete="tel" />
         </div>
 
         <div class="field">
-          <label for="email" data-i18n="emailLabel">E-Mail</label>
-          <input id="email" name="email" type="email" placeholder="email@example.com" />
+          <label for="telegramId" data-i18n="telegramIdLabel">Telegram ID *</label>
+          <input id="telegramId" name="telegramId" type="text" inputmode="numeric" pattern="[0-9]+" placeholder="123456789" required />
+          <span class="hint" data-i18n="telegramHint">Only the numeric Telegram ID, not @username.</span>
         </div>
 
-        <div class="field">
-          <label for="language" data-i18n="languageLabel">Language</label>
-          <select id="language" name="language">
-            <option value="EN">EN</option>
-            <option value="ES">ES</option>
-            <option value="DE">DE</option>
-            <option value="FR">FR</option>
-            <option value="IT">IT</option>
-            <option value="NL">NL</option>
-            <option value="RU">RU</option>
-            <option value="AR">AR</option>
-          </select>
+        <div class="field full">
+          <label for="email" data-i18n="emailLabel">E-Mail *</label>
+          <input id="email" name="email" type="email" placeholder="email@example.com" required autocomplete="email" />
         </div>
 
         <div class="field">
@@ -304,27 +299,28 @@
             <option value="Hotel Concierge">Hotel Concierge</option>
             <option value="Barkeeper">Barkeeper</option>
             <option value="Promoter">Promoter</option>
-            <option value="Taxifahrer">Taxifahrer</option>
-            <option value="Sonstiges">Sonstiges</option>
+            <option value="Taxi Driver">Taxi Driver</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
         <div class="field">
-          <label for="location" data-i18n="locationLabel">Location</label>
-          <input id="location" name="location" type="text" placeholder="Location" />
+          <label for="workplace" data-i18n="workplaceLabel">Workplace *</label>
+          <input id="workplace" name="workplace" type="text" placeholder="Workplace" required />
         </div>
 
         <div class="field">
-          <label for="commissionModel" data-i18n="commissionModelLabel">Commission model</label>
-          <select id="commissionModel" name="commissionModel">
-            <option value="Standard">Standard</option>
-            <option value="Individual">Individual</option>
+          <label for="language" data-i18n="languageLabel">Language *</label>
+          <select id="language" name="language" required>
+            <option value="EN">EN</option>
+            <option value="ES">ES</option>
+            <option value="DE">DE</option>
+            <option value="FR">FR</option>
+            <option value="IT">IT</option>
+            <option value="NL">NL</option>
+            <option value="RU">RU</option>
+            <option value="AR">AR</option>
           </select>
-        </div>
-
-        <div class="field">
-          <label for="ownCommission" data-i18n="ownCommissionLabel">Own commission € *</label>
-          <input id="ownCommission" name="ownCommission" type="number" min="0" step="0.01" value="20" required />
         </div>
 
         <div class="field">
@@ -340,7 +336,7 @@
 
         <div class="field full">
           <label for="paymentDetail" data-i18n="paymentDetailLabel">Payment detail *</label>
-          <input id="paymentDetail" name="paymentDetail" type="text" placeholder="IBAN / @user / PayPal" required />
+          <input id="paymentDetail" name="paymentDetail" type="text" placeholder="IBAN / @user / PayPal / Bizum" required />
         </div>
 
         <div class="field full">
@@ -357,6 +353,8 @@
   </div>
 
   <script>
+    const TELEGRAM_USERNAME = "invictuzzzzz";
+
     const form = document.getElementById("telegramForm");
     const preview = document.getElementById("preview");
     const uiLanguage = document.getElementById("uiLanguage");
@@ -368,16 +366,15 @@
         title: "Affiliate Form",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Language",
-        planLabel: "Plan",
-        nameLabel: "Name *",
-        telegramIdLabel: "Telegram ID *",
+        firstNameLabel: "First name *",
+        lastNameLabel: "Last name *",
         phoneLabel: "Phone *",
-        emailLabel: "E-Mail",
-        languageLabel: "Language",
+        telegramIdLabel: "Telegram ID *",
+        telegramHint: "Only the numeric Telegram ID, not @username.",
+        emailLabel: "E-Mail *",
         roleLabel: "Role *",
-        locationLabel: "Location",
-        commissionModelLabel: "Commission model",
-        ownCommissionLabel: "Own commission € *",
+        workplaceLabel: "Workplace *",
+        languageLabel: "Language *",
         paymentMethodLabel: "Payment method *",
         paymentDetailLabel: "Payment detail *",
         previewLabel: "Preview",
@@ -385,43 +382,41 @@
         copyBtn: "Copy",
         copied: "Copied",
         placeholders: {
-          name: "Name",
-          telegramId: "123456789",
+          firstName: "First name",
+          lastName: "Last name",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@example.com",
-          location: "Location",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Workplace",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "New affiliate",
-          plan: "Plan",
-          name: "Name",
-          telegramId: "Telegram ID",
+          firstName: "First name",
+          lastName: "Last name",
           phone: "Phone",
+          telegramId: "Telegram ID",
           email: "E-Mail",
-          language: "Language",
           role: "Role",
-          location: "Location",
-          commissionModel: "Commission model",
-          ownCommission: "Own commission €",
+          workplace: "Workplace",
+          language: "Language",
           paymentMethod: "Payment method",
           paymentDetail: "Payment detail"
         }
       },
       es: {
-        title: "Formulario Afiliado",
+        title: "Formulario de Afiliado",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Idioma",
-        planLabel: "Plan",
-        nameLabel: "Nombre *",
-        telegramIdLabel: "Telegram ID *",
+        firstNameLabel: "Nombre *",
+        lastNameLabel: "Apellido *",
         phoneLabel: "Teléfono *",
-        emailLabel: "E-Mail",
-        languageLabel: "Idioma",
+        telegramIdLabel: "Telegram ID *",
+        telegramHint: "Solo el ID numérico de Telegram, no @usuario.",
+        emailLabel: "E-Mail *",
         roleLabel: "Rol *",
-        locationLabel: "Ubicación",
-        commissionModelLabel: "Modelo de comisión",
-        ownCommissionLabel: "Comisión propia € *",
+        workplaceLabel: "Lugar de trabajo *",
+        languageLabel: "Idioma *",
         paymentMethodLabel: "Método de pago *",
         paymentDetailLabel: "Detalle de pago *",
         previewLabel: "Vista previa",
@@ -429,25 +424,24 @@
         copyBtn: "Copiar",
         copied: "Copiado",
         placeholders: {
-          name: "Nombre",
-          telegramId: "123456789",
+          firstName: "Nombre",
+          lastName: "Apellido",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@ejemplo.com",
-          location: "Ubicación",
-          paymentDetail: "IBAN / @usuario / PayPal"
+          workplace: "Lugar de trabajo",
+          paymentDetail: "IBAN / @usuario / PayPal / Bizum"
         },
         fields: {
           header: "Nuevo afiliado",
-          plan: "Plan",
-          name: "Nombre",
-          telegramId: "Telegram ID",
+          firstName: "Nombre",
+          lastName: "Apellido",
           phone: "Teléfono",
+          telegramId: "Telegram ID",
           email: "E-Mail",
-          language: "Idioma",
           role: "Rol",
-          location: "Ubicación",
-          commissionModel: "Modelo de comisión",
-          ownCommission: "Comisión propia €",
+          workplace: "Lugar de trabajo",
+          language: "Idioma",
           paymentMethod: "Método de pago",
           paymentDetail: "Detalle de pago"
         }
@@ -456,16 +450,15 @@
         title: "Affiliate-Formular",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Sprache",
-        planLabel: "Plan",
-        nameLabel: "Name *",
-        telegramIdLabel: "Telegram-ID *",
+        firstNameLabel: "Vorname *",
+        lastNameLabel: "Nachname *",
         phoneLabel: "Telefon *",
-        emailLabel: "E-Mail",
-        languageLabel: "Sprache",
+        telegramIdLabel: "Telegram-ID *",
+        telegramHint: "Nur die numerische Telegram-ID, nicht @Benutzername.",
+        emailLabel: "E-Mail *",
         roleLabel: "Rolle *",
-        locationLabel: "Standort",
-        commissionModelLabel: "Provisionsmodell",
-        ownCommissionLabel: "Eigene Provision € *",
+        workplaceLabel: "Arbeitsort *",
+        languageLabel: "Sprache *",
         paymentMethodLabel: "Zahlungsmethode *",
         paymentDetailLabel: "Zahlungsdetail *",
         previewLabel: "Vorschau",
@@ -473,25 +466,24 @@
         copyBtn: "Kopieren",
         copied: "Kopiert",
         placeholders: {
-          name: "Name",
-          telegramId: "123456789",
+          firstName: "Vorname",
+          lastName: "Nachname",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@beispiel.com",
-          location: "Standort",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Arbeitsort",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "Neuer Affiliate",
-          plan: "Plan",
-          name: "Name",
-          telegramId: "Telegram-ID",
+          firstName: "Vorname",
+          lastName: "Nachname",
           phone: "Telefon",
+          telegramId: "Telegram-ID",
           email: "E-Mail",
-          language: "Sprache",
           role: "Rolle",
-          location: "Standort",
-          commissionModel: "Provisionsmodell",
-          ownCommission: "Eigene Provision €",
+          workplace: "Arbeitsort",
+          language: "Sprache",
           paymentMethod: "Zahlungsmethode",
           paymentDetail: "Zahlungsdetail"
         }
@@ -500,16 +492,15 @@
         title: "Formulaire Affilié",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Langue",
-        planLabel: "Plan",
-        nameLabel: "Nom *",
-        telegramIdLabel: "ID Telegram *",
+        firstNameLabel: "Prénom *",
+        lastNameLabel: "Nom *",
         phoneLabel: "Téléphone *",
-        emailLabel: "E-Mail",
-        languageLabel: "Langue",
+        telegramIdLabel: "ID Telegram *",
+        telegramHint: "Uniquement l'ID numérique Telegram, pas @utilisateur.",
+        emailLabel: "E-Mail *",
         roleLabel: "Rôle *",
-        locationLabel: "Lieu",
-        commissionModelLabel: "Modèle de commission",
-        ownCommissionLabel: "Commission propre € *",
+        workplaceLabel: "Lieu de travail *",
+        languageLabel: "Langue *",
         paymentMethodLabel: "Méthode de paiement *",
         paymentDetailLabel: "Détail du paiement *",
         previewLabel: "Aperçu",
@@ -517,25 +508,24 @@
         copyBtn: "Copier",
         copied: "Copié",
         placeholders: {
-          name: "Nom",
-          telegramId: "123456789",
+          firstName: "Prénom",
+          lastName: "Nom",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@exemple.com",
-          location: "Lieu",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Lieu de travail",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "Nouvel affilié",
-          plan: "Plan",
-          name: "Nom",
-          telegramId: "ID Telegram",
+          firstName: "Prénom",
+          lastName: "Nom",
           phone: "Téléphone",
+          telegramId: "ID Telegram",
           email: "E-Mail",
-          language: "Langue",
           role: "Rôle",
-          location: "Lieu",
-          commissionModel: "Modèle de commission",
-          ownCommission: "Commission propre €",
+          workplace: "Lieu de travail",
+          language: "Langue",
           paymentMethod: "Méthode de paiement",
           paymentDetail: "Détail du paiement"
         }
@@ -544,16 +534,15 @@
         title: "Modulo Affiliato",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Lingua",
-        planLabel: "Piano",
-        nameLabel: "Nome *",
-        telegramIdLabel: "ID Telegram *",
+        firstNameLabel: "Nome *",
+        lastNameLabel: "Cognome *",
         phoneLabel: "Telefono *",
-        emailLabel: "E-Mail",
-        languageLabel: "Lingua",
+        telegramIdLabel: "ID Telegram *",
+        telegramHint: "Solo l'ID numerico di Telegram, non @username.",
+        emailLabel: "E-Mail *",
         roleLabel: "Ruolo *",
-        locationLabel: "Posizione",
-        commissionModelLabel: "Modello di commissione",
-        ownCommissionLabel: "Commissione propria € *",
+        workplaceLabel: "Luogo di lavoro *",
+        languageLabel: "Lingua *",
         paymentMethodLabel: "Metodo di pagamento *",
         paymentDetailLabel: "Dettaglio pagamento *",
         previewLabel: "Anteprima",
@@ -561,25 +550,24 @@
         copyBtn: "Copia",
         copied: "Copiato",
         placeholders: {
-          name: "Nome",
-          telegramId: "123456789",
+          firstName: "Nome",
+          lastName: "Cognome",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@esempio.com",
-          location: "Posizione",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Luogo di lavoro",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "Nuovo affiliato",
-          plan: "Piano",
-          name: "Nome",
-          telegramId: "ID Telegram",
+          firstName: "Nome",
+          lastName: "Cognome",
           phone: "Telefono",
+          telegramId: "ID Telegram",
           email: "E-Mail",
-          language: "Lingua",
           role: "Ruolo",
-          location: "Posizione",
-          commissionModel: "Modello di commissione",
-          ownCommission: "Commissione propria €",
+          workplace: "Luogo di lavoro",
+          language: "Lingua",
           paymentMethod: "Metodo di pagamento",
           paymentDetail: "Dettaglio pagamento"
         }
@@ -588,16 +576,15 @@
         title: "Affiliate Formulier",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Taal",
-        planLabel: "Plan",
-        nameLabel: "Naam *",
-        telegramIdLabel: "Telegram-ID *",
+        firstNameLabel: "Voornaam *",
+        lastNameLabel: "Achternaam *",
         phoneLabel: "Telefoon *",
-        emailLabel: "E-Mail",
-        languageLabel: "Taal",
+        telegramIdLabel: "Telegram-ID *",
+        telegramHint: "Alleen de numerieke Telegram-ID, niet @gebruikersnaam.",
+        emailLabel: "E-Mail *",
         roleLabel: "Rol *",
-        locationLabel: "Locatie",
-        commissionModelLabel: "Commissiemodel",
-        ownCommissionLabel: "Eigen commissie € *",
+        workplaceLabel: "Werkplek *",
+        languageLabel: "Taal *",
         paymentMethodLabel: "Betaalmethode *",
         paymentDetailLabel: "Betaaldetail *",
         previewLabel: "Voorbeeld",
@@ -605,25 +592,24 @@
         copyBtn: "Kopiëren",
         copied: "Gekopieerd",
         placeholders: {
-          name: "Naam",
-          telegramId: "123456789",
+          firstName: "Voornaam",
+          lastName: "Achternaam",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@voorbeeld.com",
-          location: "Locatie",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Werkplek",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "Nieuwe affiliate",
-          plan: "Plan",
-          name: "Naam",
-          telegramId: "Telegram-ID",
+          firstName: "Voornaam",
+          lastName: "Achternaam",
           phone: "Telefoon",
+          telegramId: "Telegram-ID",
           email: "E-Mail",
-          language: "Taal",
           role: "Rol",
-          location: "Locatie",
-          commissionModel: "Commissiemodel",
-          ownCommission: "Eigen commissie €",
+          workplace: "Werkplek",
+          language: "Taal",
           paymentMethod: "Betaalmethode",
           paymentDetail: "Betaaldetail"
         }
@@ -632,16 +618,15 @@
         title: "Форма Аффилиата",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "Язык",
-        planLabel: "План",
-        nameLabel: "Имя *",
-        telegramIdLabel: "Telegram ID *",
+        firstNameLabel: "Имя *",
+        lastNameLabel: "Фамилия *",
         phoneLabel: "Телефон *",
-        emailLabel: "E-Mail",
-        languageLabel: "Язык",
+        telegramIdLabel: "Telegram ID *",
+        telegramHint: "Только числовой Telegram ID, не @username.",
+        emailLabel: "E-Mail *",
         roleLabel: "Роль *",
-        locationLabel: "Локация",
-        commissionModelLabel: "Модель комиссии",
-        ownCommissionLabel: "Своя комиссия € *",
+        workplaceLabel: "Место работы *",
+        languageLabel: "Язык *",
         paymentMethodLabel: "Способ оплаты *",
         paymentDetailLabel: "Платежная информация *",
         previewLabel: "Предпросмотр",
@@ -649,25 +634,24 @@
         copyBtn: "Копировать",
         copied: "Скопировано",
         placeholders: {
-          name: "Имя",
-          telegramId: "123456789",
+          firstName: "Имя",
+          lastName: "Фамилия",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@example.com",
-          location: "Локация",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "Место работы",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "Новый аффилиат",
-          plan: "План",
-          name: "Имя",
-          telegramId: "Telegram ID",
+          firstName: "Имя",
+          lastName: "Фамилия",
           phone: "Телефон",
+          telegramId: "Telegram ID",
           email: "E-Mail",
-          language: "Язык",
           role: "Роль",
-          location: "Локация",
-          commissionModel: "Модель комиссии",
-          ownCommission: "Своя комиссия €",
+          workplace: "Место работы",
+          language: "Язык",
           paymentMethod: "Способ оплаты",
           paymentDetail: "Платежная информация"
         }
@@ -676,16 +660,15 @@
         title: "نموذج الشريك",
         subtitle: "@invictuzzzzz",
         uiLanguageLabel: "اللغة",
-        planLabel: "الخطة",
-        nameLabel: "الاسم *",
-        telegramIdLabel: "معرّف تيليجرام *",
+        firstNameLabel: "الاسم *",
+        lastNameLabel: "اللقب *",
         phoneLabel: "الهاتف *",
-        emailLabel: "البريد الإلكتروني",
-        languageLabel: "اللغة",
+        telegramIdLabel: "معرّف تيليجرام *",
+        telegramHint: "فقط الرقم التعريفي في تيليجرام، وليس @username.",
+        emailLabel: "البريد الإلكتروني *",
         roleLabel: "الدور *",
-        locationLabel: "الموقع",
-        commissionModelLabel: "نموذج العمولة",
-        ownCommissionLabel: "العمولة الخاصة € *",
+        workplaceLabel: "مكان العمل *",
+        languageLabel: "اللغة *",
         paymentMethodLabel: "طريقة الدفع *",
         paymentDetailLabel: "تفاصيل الدفع *",
         previewLabel: "المعاينة",
@@ -693,25 +676,24 @@
         copyBtn: "نسخ",
         copied: "تم النسخ",
         placeholders: {
-          name: "الاسم",
-          telegramId: "123456789",
+          firstName: "الاسم",
+          lastName: "اللقب",
           phone: "+34...",
+          telegramId: "123456789",
           email: "email@example.com",
-          location: "الموقع",
-          paymentDetail: "IBAN / @user / PayPal"
+          workplace: "مكان العمل",
+          paymentDetail: "IBAN / @user / PayPal / Bizum"
         },
         fields: {
           header: "شريك جديد",
-          plan: "الخطة",
-          name: "الاسم",
-          telegramId: "معرّف تيليجرام",
+          firstName: "الاسم",
+          lastName: "اللقب",
           phone: "الهاتف",
+          telegramId: "معرّف تيليجرام",
           email: "البريد الإلكتروني",
-          language: "اللغة",
           role: "الدور",
-          location: "الموقع",
-          commissionModel: "نموذج العمولة",
-          ownCommission: "العمولة الخاصة €",
+          workplace: "مكان العمل",
+          language: "اللغة",
           paymentMethod: "طريقة الدفع",
           paymentDetail: "تفاصيل الدفع"
         }
@@ -723,7 +705,17 @@
     }
 
     function t() {
-      return translations[currentLang()];
+      return translations[currentLang()] || translations.en;
+    }
+
+    function setText(selector, value) {
+      const element = document.querySelector(selector);
+      if (element) element.textContent = value;
+    }
+
+    function setPlaceholder(id, value) {
+      const element = document.getElementById(id);
+      if (element) element.placeholder = value;
     }
 
     function updateUIText() {
@@ -740,26 +732,26 @@
       document.getElementById("submitBtn").textContent = dict.submitBtn;
       document.getElementById("copyBtn").textContent = dict.copyBtn;
 
-      document.querySelector('[data-i18n="planLabel"]').textContent = dict.planLabel;
-      document.querySelector('[data-i18n="nameLabel"]').textContent = dict.nameLabel;
-      document.querySelector('[data-i18n="telegramIdLabel"]').textContent = dict.telegramIdLabel;
-      document.querySelector('[data-i18n="phoneLabel"]').textContent = dict.phoneLabel;
-      document.querySelector('[data-i18n="emailLabel"]').textContent = dict.emailLabel;
-      document.querySelector('[data-i18n="languageLabel"]').textContent = dict.languageLabel;
-      document.querySelector('[data-i18n="roleLabel"]').textContent = dict.roleLabel;
-      document.querySelector('[data-i18n="locationLabel"]').textContent = dict.locationLabel;
-      document.querySelector('[data-i18n="commissionModelLabel"]').textContent = dict.commissionModelLabel;
-      document.querySelector('[data-i18n="ownCommissionLabel"]').textContent = dict.ownCommissionLabel;
-      document.querySelector('[data-i18n="paymentMethodLabel"]').textContent = dict.paymentMethodLabel;
-      document.querySelector('[data-i18n="paymentDetailLabel"]').textContent = dict.paymentDetailLabel;
-      document.querySelector('[data-i18n="previewLabel"]').textContent = dict.previewLabel;
+      setText('[data-i18n="firstNameLabel"]', dict.firstNameLabel);
+      setText('[data-i18n="lastNameLabel"]', dict.lastNameLabel);
+      setText('[data-i18n="phoneLabel"]', dict.phoneLabel);
+      setText('[data-i18n="telegramIdLabel"]', dict.telegramIdLabel);
+      setText('[data-i18n="telegramHint"]', dict.telegramHint);
+      setText('[data-i18n="emailLabel"]', dict.emailLabel);
+      setText('[data-i18n="roleLabel"]', dict.roleLabel);
+      setText('[data-i18n="workplaceLabel"]', dict.workplaceLabel);
+      setText('[data-i18n="languageLabel"]', dict.languageLabel);
+      setText('[data-i18n="paymentMethodLabel"]', dict.paymentMethodLabel);
+      setText('[data-i18n="paymentDetailLabel"]', dict.paymentDetailLabel);
+      setText('[data-i18n="previewLabel"]', dict.previewLabel);
 
-      document.getElementById("name").placeholder = dict.placeholders.name;
-      document.getElementById("telegramId").placeholder = dict.placeholders.telegramId;
-      document.getElementById("phone").placeholder = dict.placeholders.phone;
-      document.getElementById("email").placeholder = dict.placeholders.email;
-      document.getElementById("location").placeholder = dict.placeholders.location;
-      document.getElementById("paymentDetail").placeholder = dict.placeholders.paymentDetail;
+      setPlaceholder("firstName", dict.placeholders.firstName);
+      setPlaceholder("lastName", dict.placeholders.lastName);
+      setPlaceholder("phone", dict.placeholders.phone);
+      setPlaceholder("telegramId", dict.placeholders.telegramId);
+      setPlaceholder("email", dict.placeholders.email);
+      setPlaceholder("workplace", dict.placeholders.workplace);
+      setPlaceholder("paymentDetail", dict.placeholders.paymentDetail);
 
       updatePreview();
     }
@@ -771,16 +763,14 @@
       return [
         dict.header,
         "",
-        `${dict.plan}: ${data.get("plan") || ""}`,
-        `${dict.name}: ${data.get("name") || ""}`,
-        `${dict.telegramId}: ${data.get("telegramId") || ""}`,
+        `${dict.firstName}: ${data.get("firstName") || ""}`,
+        `${dict.lastName}: ${data.get("lastName") || ""}`,
         `${dict.phone}: ${data.get("phone") || ""}`,
+        `${dict.telegramId}: ${data.get("telegramId") || ""}`,
         `${dict.email}: ${data.get("email") || ""}`,
-        `${dict.language}: ${data.get("language") || ""}`,
         `${dict.role}: ${data.get("role") || ""}`,
-        `${dict.location}: ${data.get("location") || ""}`,
-        `${dict.commissionModel}: ${data.get("commissionModel") || ""}`,
-        `${dict.ownCommission}: ${data.get("ownCommission") || ""}`,
+        `${dict.workplace}: ${data.get("workplace") || ""}`,
+        `${dict.language}: ${data.get("language") || ""}`,
         `${dict.paymentMethod}: ${data.get("paymentMethod") || ""}`,
         `${dict.paymentDetail}: ${data.get("paymentDetail") || ""}`
       ].join("\n");
@@ -799,13 +789,9 @@
       if (!form.reportValidity()) return;
 
       const encoded = encodeURIComponent(getMessage());
-      const tgDeepLink = `tg://resolve?domain=invictuzzzzz&text=${encoded}`;
-      const webFallback = `https://t.me/invictuzzzzz?text=${encoded}`;
+      const webFallback = `https://t.me/${TELEGRAM_USERNAME}?text=${encoded}`;
 
-      window.location.href = tgDeepLink;
-      setTimeout(() => {
-        window.open(webFallback, "_blank");
-      }, 700);
+      window.open(webFallback, "_blank", "noopener,noreferrer");
     });
 
     copyBtn.addEventListener("click", async function() {
@@ -816,7 +802,10 @@
         setTimeout(() => {
           copyBtn.textContent = oldText;
         }, 1200);
-      } catch {}
+      } catch {
+        preview.select();
+        document.execCommand("copy");
+      }
     });
 
     updateUIText();
