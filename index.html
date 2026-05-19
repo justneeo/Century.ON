@@ -199,7 +199,8 @@
       margin-top:4px;
     }
 
-    button{
+    button,
+    .link-button{
       border:none;
       border-radius:14px;
       padding:14px 18px;
@@ -359,7 +360,8 @@
         flex-direction:column;
       }
 
-      .actions button{
+      .actions button,
+      .actions .link-button{
         width:100%;
       }
     }
@@ -371,7 +373,7 @@
       <div class="topbar">
         <div class="title">
           <h1 id="title">Affiliate Form</h1>
-          <p id="subtitle">WhatsApp: +49 151 23861083 / +34 644 075 065</p>
+          <p id="subtitle">Century.ON</p>
         </div>
 
         <div class="lang">
@@ -474,7 +476,7 @@
 
         <div class="actions">
           <button type="submit" class="primary" id="submitBtn">Send by WhatsApp</button>
-          <button type="button" class="secondary" id="sendOldNumberBtn">Send to old number</button>
+          <a class="secondary link-button" id="centuryOnBtn" href="https://justneeo.github.io/Century.ON/" target="_blank" rel="noopener noreferrer">Open Century.ON</a>
           <button type="button" class="secondary" id="copyBtn">Copy</button>
         </div>
       </form>
@@ -516,8 +518,8 @@
   </div>
 
   <script>
-    const WHATSAPP_NUMBER_PRIMARY = "4915123861083";
-    const WHATSAPP_NUMBER_SECONDARY = "34644075065";
+    const WHATSAPP_NUMBER = "34654663043";
+    const CENTURY_ON_URL = "https://justneeo.github.io/Century.ON/";
 
     const form = document.getElementById("telegramForm");
     const preview = document.getElementById("preview");
@@ -528,7 +530,7 @@
     const translations = {
       en: {
         title: "Affiliate Form",
-        subtitle: "WhatsApp: +49 151 23861083 / +34 644 075 065",
+        subtitle: "Century.ON",
         uiLanguageLabel: "Language",
         planLabel: "Plan",
         firstNameLabel: "First name *",
@@ -545,8 +547,8 @@
         paymentMethodLabel: "Payment method *",
         paymentDetailLabel: "Payment details *",
         previewLabel: "Message preview",
-        submitBtn: "Send by WhatsApp",
-        sendOldNumberBtn: "Send to old number",
+        submitBtn: "Send",
+        centuryOnBtn: "Open Century.ON",
         copyBtn: "Copy message",
         copied: "Copied",
         placeholders: {
@@ -672,8 +674,8 @@
         paymentMethodLabel: "Método de pago *",
         paymentDetailLabel: "Detalle de pago *",
         previewLabel: "Vista previa del mensaje",
-        submitBtn: "Enviar por WhatsApp",
-        sendOldNumberBtn: "Enviar al número antiguo",
+        submitBtn: "Enviar",
+        centuryOnBtn: "Abrir Century.ON",
         copyBtn: "Copiar mensaje",
         copied: "Copiado",
         placeholders: {
@@ -812,7 +814,8 @@
       document.getElementById("subtitle").textContent = dict.subtitle;
       document.getElementById("uiLanguageLabel").textContent = dict.uiLanguageLabel;
       document.getElementById("submitBtn").textContent = dict.submitBtn;
-      document.getElementById("sendOldNumberBtn").textContent = dict.sendOldNumberBtn;
+      document.getElementById("centuryOnBtn").textContent = dict.centuryOnBtn;
+      document.getElementById("centuryOnBtn").href = CENTURY_ON_URL;
       document.getElementById("copyBtn").textContent = dict.copyBtn;
 
       setText('[data-i18n="planLabel"]', dict.planLabel);
@@ -888,16 +891,7 @@
       if (!form.reportValidity()) return;
 
       const encoded = encodeURIComponent(getMessage());
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER_PRIMARY}?text=${encoded}`;
-
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-    });
-
-    document.getElementById("sendOldNumberBtn").addEventListener("click", function() {
-      if (!form.reportValidity()) return;
-
-      const encoded = encodeURIComponent(getMessage());
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER_SECONDARY}?text=${encoded}`;
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 
       window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     });
