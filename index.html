@@ -105,6 +105,26 @@
       color:var(--muted);
     }
 
+    .helper-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 14px;
+      margin-top:7px;
+    }
+
+    .helper-link{
+      font-size:12px;
+      color:#ffffff;
+      text-decoration:underline;
+      text-underline-offset:3px;
+      opacity:.88;
+      width:max-content;
+    }
+
+    .helper-link:hover{
+      opacity:1;
+    }
+
     form{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -187,6 +207,10 @@
       font-weight:600;
       cursor:pointer;
       transition:.2s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .primary{
@@ -207,6 +231,8 @@
     .secondary:hover{
       background:rgba(255,255,255,0.09);
     }
+
+    
 
     .rtl{
       direction:rtl;
@@ -345,7 +371,7 @@
       <div class="topbar">
         <div class="title">
           <h1 id="title">Affiliate Form</h1>
-          <p id="subtitle">@invictuzzzzz</p>
+          <p id="subtitle">WhatsApp: +49 151 23861083 / +34 644 075 065</p>
         </div>
 
         <div class="lang">
@@ -383,6 +409,10 @@
           <label for="telegramId" data-i18n="telegramIdLabel">Telegram ID *</label>
           <input id="telegramId" name="telegramId" type="text" inputmode="numeric" pattern="[0-9]+" placeholder="123456789" required />
           <span class="hint" data-i18n="telegramHint">Only the numeric Telegram ID, not @username.</span>
+          <div class="helper-links">
+            <a class="helper-link" id="telegramHelper" href="https://t.me/userinfobot" target="_blank" rel="noopener noreferrer" data-i18n="telegramHelper">Find your Telegram ID here</a>
+            <a class="helper-link" id="telegramDownload" href="https://telegram.org/apps" target="_blank" rel="noopener noreferrer" data-i18n="telegramDownload">Download Telegram here</a>
+          </div>
         </div>
 
         <div class="field full">
@@ -443,7 +473,8 @@
         </div>
 
         <div class="actions">
-          <button type="submit" class="primary" id="submitBtn">Open Telegram</button>
+          <button type="submit" class="primary" id="submitBtn">Send by WhatsApp</button>
+          <button type="button" class="secondary" id="sendOldNumberBtn">Send to old number</button>
           <button type="button" class="secondary" id="copyBtn">Copy</button>
         </div>
       </form>
@@ -485,7 +516,8 @@
   </div>
 
   <script>
-    const TELEGRAM_USERNAME = "invictuzzzzz";
+    const WHATSAPP_NUMBER_PRIMARY = "4915123861083";
+    const WHATSAPP_NUMBER_SECONDARY = "34644075065";
 
     const form = document.getElementById("telegramForm");
     const preview = document.getElementById("preview");
@@ -496,7 +528,7 @@
     const translations = {
       en: {
         title: "Affiliate Form",
-        subtitle: "@invictuzzzzz",
+        subtitle: "WhatsApp: +49 151 23861083 / +34 644 075 065",
         uiLanguageLabel: "Language",
         planLabel: "Plan",
         firstNameLabel: "First name *",
@@ -504,6 +536,8 @@
         phoneLabel: "Phone number *",
         telegramIdLabel: "Telegram ID *",
         telegramHint: "Only the numeric Telegram ID, not @username.",
+        telegramHelper: "Find your Telegram ID here",
+        telegramDownload: "Download Telegram here",
         emailLabel: "E-Mail *",
         roleLabel: "Role *",
         workplaceLabel: "Workplace *",
@@ -511,7 +545,8 @@
         paymentMethodLabel: "Payment method *",
         paymentDetailLabel: "Payment details *",
         previewLabel: "Message preview",
-        submitBtn: "Open Telegram",
+        submitBtn: "Send by WhatsApp",
+        sendOldNumberBtn: "Send to old number",
         copyBtn: "Copy message",
         copied: "Copied",
         placeholders: {
@@ -628,6 +663,8 @@
         phoneLabel: "Teléfono *",
         telegramIdLabel: "Telegram ID *",
         telegramHint: "Solo el ID numérico de Telegram, no @usuario.",
+        telegramHelper: "Encuentra tu Telegram ID aquí",
+        telegramDownload: "Descarga Telegram aquí",
         emailLabel: "E-Mail *",
         roleLabel: "Rol *",
         workplaceLabel: "Lugar de trabajo *",
@@ -635,7 +672,8 @@
         paymentMethodLabel: "Método de pago *",
         paymentDetailLabel: "Detalle de pago *",
         previewLabel: "Vista previa del mensaje",
-        submitBtn: "Abrir Telegram",
+        submitBtn: "Enviar por WhatsApp",
+        sendOldNumberBtn: "Enviar al número antiguo",
         copyBtn: "Copiar mensaje",
         copied: "Copiado",
         placeholders: {
@@ -774,6 +812,7 @@
       document.getElementById("subtitle").textContent = dict.subtitle;
       document.getElementById("uiLanguageLabel").textContent = dict.uiLanguageLabel;
       document.getElementById("submitBtn").textContent = dict.submitBtn;
+      document.getElementById("sendOldNumberBtn").textContent = dict.sendOldNumberBtn;
       document.getElementById("copyBtn").textContent = dict.copyBtn;
 
       setText('[data-i18n="planLabel"]', dict.planLabel);
@@ -782,6 +821,8 @@
       setText('[data-i18n="phoneLabel"]', dict.phoneLabel);
       setText('[data-i18n="telegramIdLabel"]', dict.telegramIdLabel);
       setText('[data-i18n="telegramHint"]', dict.telegramHint);
+      setText('[data-i18n="telegramHelper"]', dict.telegramHelper);
+      setText('[data-i18n="telegramDownload"]', dict.telegramDownload);
       setText('[data-i18n="emailLabel"]', dict.emailLabel);
       setText('[data-i18n="roleLabel"]', dict.roleLabel);
       setText('[data-i18n="workplaceLabel"]', dict.workplaceLabel);
@@ -847,9 +888,18 @@
       if (!form.reportValidity()) return;
 
       const encoded = encodeURIComponent(getMessage());
-      const webFallback = `https://t.me/${TELEGRAM_USERNAME}?text=${encoded}`;
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER_PRIMARY}?text=${encoded}`;
 
-      window.open(webFallback, "_blank", "noopener,noreferrer");
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    });
+
+    document.getElementById("sendOldNumberBtn").addEventListener("click", function() {
+      if (!form.reportValidity()) return;
+
+      const encoded = encodeURIComponent(getMessage());
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER_SECONDARY}?text=${encoded}`;
+
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     });
 
     copyBtn.addEventListener("click", async function() {
